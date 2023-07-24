@@ -38,8 +38,7 @@ def main():
     # Clear summary if a new file is uploaded
     if 'summary' in st.session_state and st.session_state.file_name != uploaded_file:
         st.session_state.summary = None
-        st.header("PIN0")
-
+        
     st.session_state.file_name = uploaded_file
         
     st.header(st.session_state.file_name)
@@ -82,7 +81,7 @@ def main():
                 print("pin0")
                 st.session_state.summary = chain_large.run(input_documents=docs, question=pdf_summary)
                 print("pin1")
-        st.write(st.session_state.summary)
+    st.write(st.session_state.summary)
 
 
             # show user input
