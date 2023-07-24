@@ -87,12 +87,12 @@ def main():
         docs = knowledge_base.similarity_search(user_question)
         with st.spinner('Wait for it...'):
             with get_openai_callback() as cb:
-            try:
-                response = chain_qa.run(input_documents=docs, question=user_question)
-            except Exception as maxtoken_error:
-                print(maxtoken_error)
-                response = chain_large_qa.run(input_documents=docs, question=user_question) 
-            print(cb)
+                try:
+                    response = chain_qa.run(input_documents=docs, question=user_question)
+                except Exception as maxtoken_error:
+                    print(maxtoken_error)
+                    response = chain_large_qa.run(input_documents=docs, question=user_question) 
+                print(cb)
             # show/hide section using st.beta_expander
             with st.expander("Used Tokens", expanded=False):
                 st.write(cb)
