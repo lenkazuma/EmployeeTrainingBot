@@ -25,8 +25,8 @@ def main():
 
 
     load_dotenv()
-    #st.set_page_config(page_title="EEC Training")
-    #st.title("✨ Responsible Person Introduction Internal Training ✨")
+    st.set_page_config(page_title="EEC Training")
+    st.title("✨ Responsible Person Introduction Internal Training ✨")
     
     # upload file
     uploaded_file  = 'Responsible Person Introduction Internal Training Document.pdf'
@@ -62,8 +62,8 @@ def main():
     knowledge_base = FAISS.from_texts(chunks, embeddings)
 
             
-    st.header("Here's a brief summary of your file:")
-    pdf_summary = "Give me a concise summary, use the language that the file is in"
+    st.header("About: ")
+    #pdf_summary = "Give me a concise summary"
 
     docs = knowledge_base.similarity_search(pdf_summary)
             
@@ -71,7 +71,7 @@ def main():
     if 'summary' not in st.session_state or st.session_state.summary is None:
         with st.spinner('Wait for it...'):
             try:
-                st.session_state.summary = chain.run(input_documents=docs, question=pdf_summary)
+                st.session_state.summary = chain.run(input_documents=docs)
             except Exception as maxtoken_error:
             # Fallback to the larger model if the context length is exceeded
                 print(maxtoken_error)
