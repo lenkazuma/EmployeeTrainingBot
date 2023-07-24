@@ -82,7 +82,7 @@ def main():
 
 
             # show user input
-    user_question = st.text_input("Ask a question about your file :")
+    user_question = st.text_input("Ask a question about rhe training :")
     if user_question:
         docs = knowledge_base.similarity_search(user_question)
         with st.spinner('Wait for it...'):
