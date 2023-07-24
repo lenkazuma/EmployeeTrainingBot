@@ -38,6 +38,7 @@ def main():
     # Clear summary if a new file is uploaded
     if 'summary' in st.session_state and st.session_state.file_name != uploaded_file:
         st.session_state.summary = None
+        st.header("PIN0")
 
     st.session_state.file_name = uploaded_file
         
