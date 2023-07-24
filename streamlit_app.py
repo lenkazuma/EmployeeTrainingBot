@@ -15,15 +15,6 @@ from docx import Document
 from docx.table import _Cell
 
 
-def extract_text_from_table(table):
-    text = ""
-    for row in table.rows:
-        for cell in row.cells:
-            if isinstance(cell, _Cell):
-                text += cell.text + "\n"
-    return text.strip()
-
-
 def main():
     # brief summary
     llm = OpenAI()
