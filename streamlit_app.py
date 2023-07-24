@@ -30,7 +30,10 @@ def main():
     
     # upload file
     uploaded_file  = 'Responsible Person Introduction Internal Training Document.pdf'
-    
+
+
+
+
 
     # Clear summary if a new file is uploaded
     if 'summary' in st.session_state and st.session_state.file_name != uploaded_file:
@@ -38,9 +41,9 @@ def main():
 
     st.session_state.file_name = uploaded_file
         
-    
+    st.header(st.session_state.file_name)
 
-        # Handle PDF files
+    # Handle PDF files
                 
     pdf_reader = PdfReader(uploaded_file)
     text = ""
@@ -82,7 +85,7 @@ def main():
 
 
             # show user input
-    user_question = st.text_input("Ask a question about rhe training :")
+    user_question = st.text_input("Ask a question about the training :")
     if user_question:
         docs = knowledge_base.similarity_search(user_question)
         with st.spinner('Wait for it...'):
