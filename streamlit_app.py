@@ -40,8 +40,7 @@ def main():
         st.session_state.summary = None
         
     st.session_state.file_name = uploaded_file
-        
-    st.header(st.session_state.file_name)
+    
 
     # Handle PDF files
                 
