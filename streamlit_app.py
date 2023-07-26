@@ -67,9 +67,9 @@ def main():
     st.header("About: ")
     pdf_summary = "Give me a concise summary"
 
-    st.write(knowledge_base)
+    
     docs = knowledge_base.similarity_search(pdf_summary)
-            
+    st.write(docs)   
             
     if 'summary' not in st.session_state or st.session_state.summary is None:
         with st.spinner('Wait for it...'):
