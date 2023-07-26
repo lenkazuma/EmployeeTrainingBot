@@ -29,7 +29,8 @@ def main():
     st.title("✨ Responsible Person Introduction Internal Training ✨")
     
     # upload file
-    uploaded_file  = '1903.08057.pdf'
+    uploaded_file  = 'Responsible Person Introduction Internal Training Document.pdf'
+    #uploaded_file  = '1903.08057.pdf'
 
 
 
@@ -69,7 +70,7 @@ def main():
 
     
     docs = knowledge_base.similarity_search(pdf_summary)
-    st.write(docs)   
+    #st.write(docs)   
             
     if 'summary' not in st.session_state or st.session_state.summary is None:
         with st.spinner('Wait for it...'):
