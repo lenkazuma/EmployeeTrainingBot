@@ -29,7 +29,7 @@ def main():
     st.title("✨ Responsible Person Introduction Internal Training ✨")
     
     # upload file
-    uploaded_file  = 'Responsible Person Introduction Internal Training Document.pdf'
+    uploaded_file  = '1903.08057.pdf'
 
 
 
