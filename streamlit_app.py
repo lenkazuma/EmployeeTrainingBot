@@ -67,6 +67,7 @@ def main():
     st.header("About: ")
     pdf_summary = "Give me a concise summary"
 
+    st.write(knowledge_base)
     docs = knowledge_base.similarity_search(pdf_summary)
             
             
@@ -91,6 +92,7 @@ def main():
             with get_openai_callback() as cb:
                 try:
                     response = chain_qa.run(input_documents=docs, question=user_question)
+                    
                 except Exception as maxtoken_error:
                     print(maxtoken_error)
                     response = chain_large_qa.run(input_documents=docs, question=user_question) 
