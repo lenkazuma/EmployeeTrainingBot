@@ -11,9 +11,8 @@ from langchain.chains.summarize import load_summarize_chain
 from langchain.chains.mapreduce import MapReduceChain
 from langchain.llms import OpenAI
 from langchain.callbacks import get_openai_callback
-from docx import Document
-from docx.table import _Cell
 import glob
+from langchain.document_loaders import YoutubeLoader
 
 def get_pdf_text(files):
     text = ""
@@ -21,7 +20,7 @@ def get_pdf_text(files):
         pdf_reader = PdfReader(file)
         for page in pdf_reader.pages:
             text += page.extract_text()
-        return text
+    return text
 
 def main():
     # brief summary
@@ -31,7 +30,7 @@ def main():
     chain_qa = load_qa_chain(llm, chain_type="stuff")
     chain_large_qa = load_qa_chain(llm, chain_type="map_reduce")
 
-
+    
     load_dotenv()
     st.set_page_config(page_title="NQF Training", page_icon=":books:")
     st.title(":books: Guide to NQF Training :books:")
@@ -45,6 +44,9 @@ def main():
         
     st.session_state.file_name = pdf_search[0]
     
+    # Use the YoutubeLoader to load and parse the transcript of a YouTube video
+    loader = YoutubeLoader.from_youtube_url("https://www.youtube.com/watch?v=O5nskjZ_GoI", add_video_info=True)
+    video = loader.load()
 
     # Handle PDF files
     text = get_pdf_text(pdf_search)
