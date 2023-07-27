@@ -25,7 +25,7 @@ def get_pdf_text(files):
 
 def main():
     # brief summary
-    llm = OpenAI()
+    llm = OpenAI(temperature=0.7)
     chain = load_summarize_chain(llm, chain_type="stuff")
     chain_large = load_summarize_chain(llm, chain_type="map_reduce")
     chain_qa = load_qa_chain(llm, chain_type="stuff")
@@ -56,7 +56,7 @@ def main():
         )
     
     chunks = text_splitter.split_text(text)
-            
+    st.write(chunks)
 
     # create embeddings
     embeddings = OpenAIEmbeddings(disallowed_special=())
@@ -73,12 +73,12 @@ def main():
     if 'summary' not in st.session_state or st.session_state.summary is None:
         with st.spinner('Wait for it...'):
             try:
-                st.session_state.summary = chain.run(input_documents=docs, question=pdf_summary)
+                st.session_state.summary = chain.run(input_documents=docs, question=pdf_summary,return_only_outputs=True)
             except Exception as maxtoken_error:
             # Fallback to the larger model if the context length is exceeded
                 print(maxtoken_error)
                 print("pin0")
-                st.session_state.summary = chain_large.run(input_documents=docs, question=pdf_summary)
+                st.session_state.summary = chain_large.run(input_documents=docs, question=pdf_summary,return_only_outputs=True)
                 print("pin1")
     st.write(st.session_state.summary)
 
