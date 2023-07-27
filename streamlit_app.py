@@ -12,7 +12,7 @@ from langchain.chains.mapreduce import MapReduceChain
 from langchain.llms import OpenAI
 from langchain.callbacks import get_openai_callback
 import glob
-from langchain.document_loaders import YoutubeLoader
+#from langchain.document_loaders import YoutubeLoader
 
 def get_pdf_text(files):
     text = ""
@@ -45,8 +45,8 @@ def main():
     st.session_state.file_name = pdf_search[0]
     
     # Use the YoutubeLoader to load and parse the transcript of a YouTube video
-    loader = YoutubeLoader.from_youtube_url("https://www.youtube.com/watch?v=O5nskjZ_GoI", add_video_info=True)
-    video = loader.load()
+    #loader = YoutubeLoader.from_youtube_url("https://www.youtube.com/watch?v=O5nskjZ_GoI", add_video_info=True)
+    #video = loader.load()
 
     # Handle PDF files
     text = get_pdf_text(pdf_search)
