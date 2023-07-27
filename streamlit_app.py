@@ -33,8 +33,8 @@ def main():
 
 
     load_dotenv()
-    st.set_page_config(page_title="EEC Training", page_icon=":books:")
-    st.title(":books: Responsible Person Introduction Internal Training :books:")
+    st.set_page_config(page_title="NQF Training", page_icon=":books:")
+    st.title(":books: Guide to NQF Training :books:")
     
     # returns all file paths that has .pdf as extension in the specified directory
     pdf_search = glob.glob("*.pdf")
@@ -64,7 +64,7 @@ def main():
 
             
     st.header("About: ")
-    pdf_summary = "Give me a concise summary"
+    pdf_summary = "Generate me a content table/section breakdown of this document."
 
     
     docs = knowledge_base.similarity_search(pdf_summary)
