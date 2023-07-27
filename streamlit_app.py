@@ -34,7 +34,7 @@ def main():
 
     load_dotenv()
     st.set_page_config(page_title="EEC Training", page_icon=":books:")
-    st.title("✨ Responsible Person Introduction Internal Training ✨")
+    st.title(":books: Responsible Person Introduction Internal Training :books:")
     
     # upload file
     #uploaded_file  = 'Responsible Person Introduction Internal Training Document.pdf'
