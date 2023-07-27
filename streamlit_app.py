@@ -56,7 +56,7 @@ def main():
         )
     
     chunks = text_splitter.split_text(text)
-    st.write(chunks)
+    #st.write(chunks)
 
     # create embeddings
     embeddings = OpenAIEmbeddings(disallowed_special=())
