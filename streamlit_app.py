@@ -36,13 +36,8 @@ def main():
     st.set_page_config(page_title="EEC Training", page_icon=":books:")
     st.title(":books: Responsible Person Introduction Internal Training :books:")
     
-    # upload file
-    #uploaded_file  = 'Responsible Person Introduction Internal Training Document.pdf'
-    #uploaded_file  = '1903.08057.pdf'
-
     # returns all file paths that has .pdf as extension in the specified directory
     pdf_search = glob.glob("*.pdf")
-
 
     # Clear summary if a new file is uploaded
     if 'summary' in st.session_state and st.session_state.file_name not in pdf_search:
