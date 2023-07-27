@@ -13,7 +13,15 @@ from langchain.llms import OpenAI
 from langchain.callbacks import get_openai_callback
 from docx import Document
 from docx.table import _Cell
+import glob
 
+def get_pdf_text(files):
+    text = ""
+    for file in files:
+        pdf_reader = PdfReader(file)
+        for page in pdf_reader.pages:
+            text += page.extract_text()
+        return text
 
 def main():
     # brief summary
@@ -25,31 +33,26 @@ def main():
 
 
     load_dotenv()
-    st.set_page_config(page_title="EEC Training")
+    st.set_page_config(page_title="EEC Training", page_icon=":books:")
     st.title("✨ Responsible Person Introduction Internal Training ✨")
     
     # upload file
-    uploaded_file  = 'Responsible Person Introduction Internal Training Document.pdf'
+    #uploaded_file  = 'Responsible Person Introduction Internal Training Document.pdf'
     #uploaded_file  = '1903.08057.pdf'
 
-
-
+    # returns all file paths that has .pdf as extension in the specified directory
+    pdf_search = glob.glob("*.pdf")
 
 
     # Clear summary if a new file is uploaded
-    if 'summary' in st.session_state and st.session_state.file_name != uploaded_file:
+    if 'summary' in st.session_state and st.session_state.file_name not in pdf_search:
         st.session_state.summary = None
         
-    st.session_state.file_name = uploaded_file
+    st.session_state.file_name = pdf_search[0]
     
 
     # Handle PDF files
-                
-    pdf_reader = PdfReader(uploaded_file)
-    text = ""
-    for page in pdf_reader.pages:
-        text += page.extract_text()
-
+    text = get_pdf_text(pdf_search)
 
     text_splitter = RecursiveCharacterTextSplitter(
             chunk_size=1000,
