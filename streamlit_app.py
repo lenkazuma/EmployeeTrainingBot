@@ -24,7 +24,7 @@ def get_pdf_text(files):
 
 def main():
     # brief summary
-    llm = OpenAI(temperature=0.7,model="text-davinci-003")
+    llm = OpenAI(temperature=0.7,model="text-davinci-003",max_tokens=1000)
     chain = load_summarize_chain(llm, chain_type="stuff")
     chain_large = load_summarize_chain(llm, chain_type="map_reduce")
     chain_qa = load_qa_chain(llm, chain_type="stuff")
@@ -89,7 +89,7 @@ def main():
             # show user input
     user_question = st.text_input("问关于这篇财报的问题 : ")      
     if user_question:
-        user_question +="。 用中文回答。"
+        user_question +="? 用中文回答。"
         docs = knowledge_base.similarity_search(user_question)
         with st.spinner('Wait for it...'):
             with get_openai_callback() as cb:
