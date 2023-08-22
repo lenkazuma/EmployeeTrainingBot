@@ -33,7 +33,8 @@ def main():
     
     load_dotenv()
     st.set_page_config(page_title="Financial Report", page_icon=":books:")
-    st.title(":books: 福建紫天传媒科技股份有限公司 2022 年年度报告 :books:")
+    st.title(":books: 福建紫天传媒科技股份有限公司  :books:")
+    st.header("2022 年年度报告")
     
     # returns all file paths that has .pdf as extension in the specified directory
     pdf_search = glob.glob("*.pdf")
@@ -65,7 +66,7 @@ def main():
     knowledge_base = FAISS.from_texts(chunks, embeddings)
 
             
-    st.header("About: ")
+    st.subheader("概述: ")
     pdf_summary = "给我一下这篇财报的总结和高亮。"
 
     
