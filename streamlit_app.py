@@ -32,8 +32,8 @@ def main():
 
     
     load_dotenv()
-    st.set_page_config(page_title="NQF Training", page_icon=":books:")
-    st.title(":books: Guide to NQF Training :books:")
+    st.set_page_config(page_title="Financial Report", page_icon=":books:")
+    st.title(":books: 福建紫天传媒科技股份有限公司 2022 年年度报告 :books:")
     
     # returns all file paths that has .pdf as extension in the specified directory
     pdf_search = glob.glob("*.pdf")
@@ -66,7 +66,7 @@ def main():
 
             
     st.header("About: ")
-    pdf_summary = "Generate me a content table/section breakdown of this document."
+    pdf_summary = "给我一下这篇财报的总结和高亮。"
 
     
     docs = knowledge_base.similarity_search(pdf_summary)
@@ -86,7 +86,7 @@ def main():
 
 
             # show user input
-    user_question = st.text_input("Ask a question about the training :")
+    user_question = st.text_input("问关于这篇财报的问题 :")
     if user_question:
         docs = knowledge_base.similarity_search(user_question)
         with st.spinner('Wait for it...'):
