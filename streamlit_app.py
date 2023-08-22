@@ -33,7 +33,7 @@ def main():
     
     load_dotenv()
     st.set_page_config(page_title="Financial Report", page_icon=":books:")
-    st.title(":books: 福建紫天传媒科技股份有限公司  :books:")
+    st.title("福建紫天传媒科技股份有限公司")
     st.header("2022 年年度报告")
     
     # returns all file paths that has .pdf as extension in the specified directory
