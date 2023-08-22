@@ -67,7 +67,7 @@ def main():
 
             
     st.subheader("概述: ")
-    pdf_summary = "用中文给我一下这篇财报的概述"
+    pdf_summary = "用中文给我总结一下这篇财报。"
 
     
     docs = knowledge_base.similarity_search(pdf_summary)
