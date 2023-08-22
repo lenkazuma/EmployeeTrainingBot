@@ -88,9 +88,9 @@ def main():
 
             # show user input
     user_question = st.text_input("问关于这篇财报的问题 : ")
-    if user_question != "":
-        user_question +="。 用中文回答。"
+        
     if user_question:
+        user_question +="。 用中文回答。"
         docs = knowledge_base.similarity_search(user_question)
         with st.spinner('Wait for it...'):
             with get_openai_callback() as cb:
