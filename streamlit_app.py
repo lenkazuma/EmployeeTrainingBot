@@ -33,8 +33,8 @@ def main():
     
     load_dotenv()
     st.set_page_config(page_title="Financial Report", page_icon=":books:")
-    st.title("福建紫天传媒科技股份有限公司")
-    st.header("2022 年年度报告")
+    st.title("BERKSHIRE HATHAWAY INC.")
+    st.header("2022 ANNUAL REPORT")
     
     # returns all file paths that has .pdf as extension in the specified directory
     pdf_search = glob.glob("*.pdf")
@@ -66,8 +66,8 @@ def main():
     knowledge_base = FAISS.from_texts(chunks, embeddings)
 
             
-    st.subheader("概述: ")
-    pdf_summary = "用中文总结一下这篇财报。"
+    st.subheader("About: ")
+    pdf_summary = "Give me a concise summary of this report."
 
     
     docs = knowledge_base.similarity_search(pdf_summary)
@@ -87,9 +87,9 @@ def main():
 
 
             # show user input
-    user_question = st.text_input("问关于这篇财报的问题 : ")      
+    user_question = st.text_input("Ask questions about this report : ")      
     if user_question:
-        user_question +="? 用中文回答。"
+        #user_question +="? 用中文回答。"
         docs = knowledge_base.similarity_search(user_question)
         with st.spinner('Wait for it...'):
             with get_openai_callback() as cb:
