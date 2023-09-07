@@ -24,7 +24,7 @@ def get_pdf_text(files):
 
 def main():
     # brief summary
-    llm = OpenAI(temperature=0.7,model="text-davinci-003",max_tokens=800)
+    llm = OpenAIEmbeddings(temperature=0.7,model="text-embedding-davinci-003",max_tokens=800)
     chain = load_summarize_chain(llm, chain_type="stuff")
     chain_large = load_summarize_chain(llm, chain_type="map_reduce")
     chain_qa = load_qa_chain(llm, chain_type="stuff")
