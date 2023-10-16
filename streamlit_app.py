@@ -155,7 +155,7 @@ if __name__ == "__main__":
     st.subheader("Ask questions to your documents")
     pdf_search = glob.glob("*.pdf")
     #sst.session_state.file_name = pdf_search
-    data = get_pdf_text(pdf_search)
+    data = load_document(pdf_search)
 
     #with st.sidebar:
 
