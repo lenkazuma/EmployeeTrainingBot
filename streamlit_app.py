@@ -23,12 +23,12 @@ def get_pdf_text(files):
     return text
 
 # Loading Documents
-def load_document(file):
+def load_document(files):
+    data = ""
     #name, extension = os.splitext(file)
-
-    loader = PyPDFLoader(file)
-    
-    data = loader.load()
+    for file in files:
+        loader = PyPDFLoader(file)
+        data += loader.load()
     return data
 
 # chunk the data
