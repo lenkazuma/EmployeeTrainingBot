@@ -170,8 +170,8 @@ if __name__ == "__main__":
     data = loader.load()
     #data = load_document(file)
     #data = get_pdf_text(files)
-    print(data)
-    st.write(data)
+    #print(data)
+    #st.write(data)
 
     chunks = chunk_data(data, 384)
                 
