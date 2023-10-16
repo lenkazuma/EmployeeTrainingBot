@@ -4,11 +4,23 @@ from langchain.embeddings import QianfanEmbeddingsEndpoint
 from langchain_wenxin.llms import Wenxin
 import streamlit.components.v1 as components
 import streamlit as st
+import glob
 import sys
+from PyPDF2 import PdfReader
+
 __import__('pysqlite3')
 sys.modules['sqlite3'] = sys.modules.pop('pysqlite3')
 
 llm = Wenxin(model="ernie-bot-turbo")
+
+
+def get_pdf_text(files):
+    text = ""
+    for file in files:
+        pdf_reader = PdfReader(file)
+        for page in pdf_reader.pages:
+            text += page.extract_text()
+    return text
 
 # Loading Documents
 def load_document(file):
@@ -141,39 +153,41 @@ if __name__ == "__main__":
     )
     #st.image("images/ai-document-reader.jpg")
     st.subheader("Ask questions to your documents")
+    pdf_search = glob.glob("*.pdf")
+    st.session_state.file_name = pdf_search[0]
+    data = get_pdf_text(pdf_search)
 
+    #with st.sidebar:
+
+        # uploaded_file = st.file_uploader(
+        #     "上传文件", type=["pdf", "doc", "txt"])
     
-    with st.sidebar:
 
-        uploaded_file = st.file_uploader(
-            "上传文件", type=["pdf", "doc", "txt"])
-        chunk_size = st.number_input(
-            "段落大小（推荐384)", min_value=100, max_value=2048, value=384, on_change=clear_history)
-        k = st.number_input("k", min_value=1, max_value=20,
-                            value=3, on_change=clear_history)
-        st.session_state.chat_context_length = st.number_input(
-            "Chat context length", min_value=1, max_value=30, value=10, on_change=clear_history) or 10
-        st.session_state.document_description = st.text_input("有什么补充信息吗？")
-        add_data = st.button("Add Data", on_click=clear_history)
+        # k = st.number_input("k", min_value=1, max_value=20,
+        #                     value=3, on_change=clear_history)
+        # st.session_state.chat_context_length = st.number_input(
+        #     "Chat context length", min_value=1, max_value=30, value=10, on_change=clear_history) or 10
+        # st.session_state.document_description = st.text_input("有什么补充信息吗？")
+        # add_data = st.button("Add Data", on_click=clear_history)
 
-        if uploaded_file and add_data:
+        # if uploaded_file and add_data:
             # display a message + execute block of code
-            with st.spinner("好的人类, 我会拜读你刚传的文件..."):
-                bytes_data = uploaded_file.read()
-                file_path = os.path.join("./", uploaded_file.name)
-                with open(file_path, "wb") as f:
-                    f.write(bytes_data)
+            # with st.spinner("好的人类, 我会拜读你刚传的文件..."):
+            #     bytes_data = uploaded_file.read()
+            #     file_path = os.path.join("./", uploaded_file.name)
+            #     with open(file_path, "wb") as f:
+            #         f.write(bytes_data)
 
-                data = load_document(file_path)
+                #data = load_document(file_path)
+
 
                 #st.write(data)
 
-                chunks = chunk_data(data, chunk_size)
+    chunks = chunk_data(data, 384)
                 
-                st.session_state.vector_store = create_embeddings(chunks)
+    st.session_state.vector_store = create_embeddings(chunks)
 
-                st.success(
-                    "我成功读取了你给予我的文件，这下来问个问题吧。 ")
+        #st.success("我成功读取了你给予我的文件，这下来问个问题吧。 ")
 
     # Create the placeholder for chat history
     chat_history_placeholder = st.empty()
