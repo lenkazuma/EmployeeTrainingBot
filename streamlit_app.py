@@ -108,7 +108,7 @@ def format_chat_history(chat_history):
     for entry in chat_history:
         question, answer = entry
         # Added an extra '\n' for the blank line
-        formatted_history += f"Question: {question}\nAnswer: {answer}\n\n"
+        formatted_history += f"问题: {question}\n回答: {answer}\n\n"
     return formatted_history
 
 
