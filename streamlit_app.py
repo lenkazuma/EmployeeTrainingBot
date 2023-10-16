@@ -165,7 +165,7 @@ if __name__ == "__main__":
     # with open(file_path, "wb") as f:
     #     f.write(bytes_data)
 
-    file_path = ".\1216686497.pdf"
+    file_path = "1216686497.pdf"
     data = load_document(file_path)
     #data = get_pdf_text(files)
     print(data)
