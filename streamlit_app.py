@@ -165,8 +165,10 @@ if __name__ == "__main__":
     # with open(file_path, "wb") as f:
     #     f.write(bytes_data)
 
-    file = "1216686497.pdf"
-    data = load_document(file)
+    #file = "1216686497.pdf"
+    loader = PyPDFLoader("1216686497.pdf")
+    data = loader.load()
+    #data = load_document(file)
     #data = get_pdf_text(files)
     print(data)
     st.write(data)
