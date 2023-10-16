@@ -166,7 +166,7 @@ if __name__ == "__main__":
     #     f.write(bytes_data)
 
     #file = "1216686497.pdf"
-    loader = PyPDFLoader("1216686497.pdf")
+    loader = PyPDFLoader("1216686497.PDF")
     data = loader.load()
     #data = load_document(file)
     #data = get_pdf_text(files)
