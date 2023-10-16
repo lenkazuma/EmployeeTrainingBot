@@ -24,7 +24,7 @@ def get_pdf_text(files):
 
 # Loading Documents
 def load_document(file):
-    name, extension = os.path.splitext(file)
+    name, extension = os.splitext(file)
 
     if extension == '.pdf' or extension == '.PDF':
         from langchain.document_loaders import PyPDFLoader
