@@ -23,12 +23,9 @@ def get_pdf_text(files):
     return data
 
 # Loading Documents
-def load_document(files):
-    data = ""
-    #name, extension = os.splitext(file)
-    for file in files:
-        loader = PyPDFLoader(file)
-        data += loader.load()
+def load_document(file):
+    loader = PyPDFLoader(file)
+    data = loader.load()
     return data
 
 # chunk the data
@@ -168,14 +165,12 @@ if __name__ == "__main__":
     # with open(file_path, "wb") as f:
     #     f.write(bytes_data)
 
-
-    # data = load_document(file_path)
-    # st.write(data)
-
-    data = get_pdf_text(files)
+    file_path = "1216686497.pdf"
+    data = load_document(file_path)
+    #data = get_pdf_text(files)
     print(data)
     st.write(data)
-    
+
     chunks = chunk_data(data, 384)
                 
     st.session_state.vector_store = create_embeddings(chunks)
