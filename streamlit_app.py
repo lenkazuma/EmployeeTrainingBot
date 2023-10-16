@@ -138,7 +138,7 @@ if __name__ == "__main__":
     #st.image("images/ai-document-reader.jpg")
     st.subheader("Ask questions to your documents")
 
-    files = glob.glob("*.pdf")
+    #files = glob.glob("*.pdf")
     #sst.session_state.file_name = pdf_search
     #data = load_document(pdf_search)
 
@@ -166,7 +166,7 @@ if __name__ == "__main__":
     #     f.write(bytes_data)
 
     #file = "1216686497.pdf"
-    loader = PyPDFLoader("1216686497.PDF")
+    loader = PyPDFLoader("1216686497.pdf")
     data = loader.load()
     #data = load_document(file)
     #data = get_pdf_text(files)
