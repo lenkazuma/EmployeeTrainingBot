@@ -124,7 +124,7 @@ if __name__ == "__main__":
 
     loader = PyPDFLoader("1216686497.pdf")
     data = loader.load()
-
+    st.session_state.document_description = "这是一篇财报"
     chunks = chunk_data(data, 384)
                 
     st.session_state.vector_store = create_embeddings(chunks)
