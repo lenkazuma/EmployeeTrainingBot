@@ -122,7 +122,7 @@ if __name__ == "__main__":
     )
     st.subheader("Ask questions to your documents")
 
-    loader = PyPDFLoader("1216686497.pdf")
+    loader = PyPDFLoader("http://static.cninfo.com.cn/finalpage/2023-04-29/1216686497.PDF")
     data = loader.load()
     st.session_state.document_description = "这是一篇财报"
     st.session_state.chat_context_length = 10
