@@ -154,7 +154,7 @@ if __name__ == "__main__":
     #st.image("images/ai-document-reader.jpg")
     st.subheader("Ask questions to your documents")
     pdf_search = glob.glob("*.pdf")
-    st.session_state.file_name = pdf_search[0]
+    #sst.session_state.file_name = pdf_search
     data = get_pdf_text(pdf_search)
 
     #with st.sidebar:
