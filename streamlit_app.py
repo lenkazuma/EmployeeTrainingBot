@@ -14,13 +14,13 @@ sys.modules['sqlite3'] = sys.modules.pop('pysqlite3')
 llm = Wenxin(model="ernie-bot-turbo")
 
 
-def get_pdf_text(files):
-    data = ""
-    for file in files:
-        pdf_reader = PdfReader(file)
-        for page in pdf_reader.pages:
-            data += page.extract_text()
-    return data
+# def get_pdf_text(files):
+#     data = ""
+#     for file in files:
+#         pdf_reader = PdfReader(file)
+#         for page in pdf_reader.pages:
+#             data += page.extract_text()
+#     return data
 
 # Loading Documents
 def load_document(file):
@@ -165,7 +165,7 @@ if __name__ == "__main__":
     # with open(file_path, "wb") as f:
     #     f.write(bytes_data)
 
-    file_path = "1216686497.pdf"
+    file_path = ".\1216686497.pdf"
     data = load_document(file_path)
     #data = get_pdf_text(files)
     print(data)
