@@ -175,6 +175,7 @@ if __name__ == "__main__":
     data = get_pdf_text(files)
     print(data)
     st.write(data)
+    
     chunks = chunk_data(data, 384)
                 
     st.session_state.vector_store = create_embeddings(chunks)
