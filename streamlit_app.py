@@ -139,7 +139,7 @@ if __name__ == "__main__":
 
     # Create an empty text area at the start
     chat_history_placeholder.text_area(
-        label="Chat History", value="", height=400)
+        label="对话记录", value="", height=400)
 
     # User input for the question
     with st.form(key="myform", clear_on_submit=True):
