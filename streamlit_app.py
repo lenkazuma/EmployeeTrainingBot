@@ -33,8 +33,8 @@ def main():
     
     load_dotenv()
     st.set_page_config(page_title="Financial Report", page_icon=":books:")
-    st.title("BERKSHIRE HATHAWAY INC.")
-    st.header("2022 ANNUAL REPORT")
+    st.title("万科企业股份有限公司")
+    st.header("2023年 第 一 季度报告")
     
     # returns all file paths that has .pdf as extension in the specified directory
     pdf_search = glob.glob("*.pdf")
@@ -66,7 +66,7 @@ def main():
     knowledge_base = FAISS.from_texts(chunks, embeddings)
 
             
-    st.subheader("About: ")
+    st.subheader("概述: ")
     pdf_summary = "Give me a concise summary of this report."
 
     
@@ -87,7 +87,7 @@ def main():
 
 
             # show user input
-    user_question = st.text_input("Ask questions about this report : ")      
+    user_question = st.text_input("问个问题 : ")      
     if user_question:
         user_question +="? 用中文回答。"
         docs = knowledge_base.similarity_search(user_question)
