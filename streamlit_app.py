@@ -13,21 +13,6 @@ sys.modules['sqlite3'] = sys.modules.pop('pysqlite3')
 
 llm = Wenxin(model="ernie-bot-turbo")
 
-
-# def get_pdf_text(files):
-#     data = ""
-#     for file in files:
-#         pdf_reader = PdfReader(file)
-#         for page in pdf_reader.pages:
-#             data += page.extract_text()
-#     return data
-
-# Loading Documents
-def load_document(file):
-    loader = PyPDFLoader(file)
-    data = loader.load()
-    return data
-
 # chunk the data
 
 
@@ -135,49 +120,14 @@ if __name__ == "__main__":
     page_title="Home",
     page_icon="🏠",
     )
-    #st.image("images/ai-document-reader.jpg")
     st.subheader("Ask questions to your documents")
 
-    #files = glob.glob("*.pdf")
-    #sst.session_state.file_name = pdf_search
-    #data = load_document(pdf_search)
-
-    #with st.sidebar:
-
-        # uploaded_file = st.file_uploader(
-        #     "上传文件", type=["pdf", "doc", "txt"])
-    
-
-        # k = st.number_input("k", min_value=1, max_value=20,
-        #                     value=3, on_change=clear_history)
-        # st.session_state.chat_context_length = st.number_input(
-        #     "Chat context length", min_value=1, max_value=30, value=10, on_change=clear_history) or 10
-        # st.session_state.document_description = st.text_input("有什么补充信息吗？")
-        # add_data = st.button("Add Data", on_click=clear_history)
-
-        # if uploaded_file and add_data:
-            # display a message + execute block of code
-            # with st.spinner("好的人类, 我会拜读你刚传的文件..."):
-
-    # uploaded_file = "1216686497.pdf"
-    # bytes_data = uploaded_file.read()
-    # file_path = os.path.join("./", uploaded_file.name)
-    # with open(file_path, "wb") as f:
-    #     f.write(bytes_data)
-
-    #file = "1216686497.pdf"
     loader = PyPDFLoader("1216686497.pdf")
     data = loader.load()
-    #data = load_document(file)
-    #data = get_pdf_text(files)
-    #print(data)
-    #st.write(data)
 
     chunks = chunk_data(data, 384)
                 
     st.session_state.vector_store = create_embeddings(chunks)
-
-        #st.success("我成功读取了你给予我的文件，这下来问个问题吧。 ")
 
     # Create the placeholder for chat history
     chat_history_placeholder = st.empty()
