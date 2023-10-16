@@ -15,12 +15,12 @@ llm = Wenxin(model="ernie-bot-turbo")
 
 
 def get_pdf_text(files):
-    text = ""
+    data = ""
     for file in files:
         pdf_reader = PdfReader(file)
         for page in pdf_reader.pages:
-            text += page.extract_text()
-    return text
+            data += page.extract_text()
+    return data
 
 # Loading Documents
 def load_document(files):
@@ -140,9 +140,9 @@ if __name__ == "__main__":
     )
     #st.image("images/ai-document-reader.jpg")
     st.subheader("Ask questions to your documents")
-    pdf_search = glob.glob("*.pdf")
+    files = glob.glob("*.pdf")
     #sst.session_state.file_name = pdf_search
-    data = load_document(pdf_search)
+    #data = load_document(pdf_search)
 
     #with st.sidebar:
 
@@ -160,16 +160,18 @@ if __name__ == "__main__":
         # if uploaded_file and add_data:
             # display a message + execute block of code
             # with st.spinner("好的人类, 我会拜读你刚传的文件..."):
-            #     bytes_data = uploaded_file.read()
-            #     file_path = os.path.join("./", uploaded_file.name)
-            #     with open(file_path, "wb") as f:
-            #         f.write(bytes_data)
 
-                #data = load_document(file_path)
+    # uploaded_file = "1216686497.pdf"
+    # bytes_data = uploaded_file.read()
+    # file_path = os.path.join("./", uploaded_file.name)
+    # with open(file_path, "wb") as f:
+    #     f.write(bytes_data)
 
 
-                #st.write(data)
+    # data = load_document(file_path)
+    # st.write(data)
 
+    data = get_pdf_text(files)
     chunks = chunk_data(data, 384)
                 
     st.session_state.vector_store = create_embeddings(chunks)
