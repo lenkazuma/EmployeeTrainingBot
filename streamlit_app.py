@@ -7,7 +7,7 @@ import streamlit as st
 import glob
 import sys
 from PyPDF2 import PdfReader
-
+from langchain.document_loaders import PyPDFLoader
 __import__('pysqlite3')
 sys.modules['sqlite3'] = sys.modules.pop('pysqlite3')
 
@@ -24,23 +24,10 @@ def get_pdf_text(files):
 
 # Loading Documents
 def load_document(file):
-    name, extension = os.splitext(file)
+    #name, extension = os.splitext(file)
 
-    if extension == '.pdf' or extension == '.PDF':
-        from langchain.document_loaders import PyPDFLoader
-        print(f'Loading {file}')
-        loader = PyPDFLoader(file)
-    elif extension == '.docx':
-        from langchain.document_loaders import Docx2txtLoader
-        print(f'Loading {file}')
-        loader = Docx2txtLoader(file)
-    elif extension == '.txt':
-        from langchain.document_loaders import TextLoader
-        loader = TextLoader(file)
-    else:
-        print('Document format is not supported!')
-        return None
-
+    loader = PyPDFLoader(file)
+    
     data = loader.load()
     return data
 
