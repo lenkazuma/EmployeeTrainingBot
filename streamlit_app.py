@@ -3,14 +3,12 @@ import streamlit as st
 from langchain.vectorstores import Chroma
 from langchain.embeddings import QianfanEmbeddingsEndpoint
 from langchain.llms import QianfanLLMEndpoint
-from langchain_wenxin.llms import Wenxin
 import streamlit.components.v1 as components
 import sys
 
 from langchain.document_loaders import PyPDFLoader
 __import__('pysqlite3')
 sys.modules['sqlite3'] = sys.modules.pop('pysqlite3')
-
 
 # chunk the data
 def chunk_data(data, chunk_size):
@@ -34,8 +32,6 @@ def create_embeddings(chunks):
 def ask_with_memory(vector_store, question, chat_history=[], document_description=""):
     from langchain.chains import ConversationalRetrievalChain
     from langchain.prompts.chat import ChatPromptTemplate, HumanMessagePromptTemplate, SystemMessagePromptTemplate
-
-    #llm = Wenxin(model="ernie-bot-turbo")
     llm = QianfanLLMEndpoint(
         streaming=True, 
         model="ERNIE-Bot-turbo",
@@ -63,6 +59,34 @@ def ask_with_memory(vector_store, question, chat_history=[], document_descriptio
     result = crc({'question': question, 'chat_history': chat_history})
     return result
 
+def ask_for_summary(vector_store, chat_history=[], document_description=""):
+    from langchain.chains import ConversationalRetrievalChain
+    from langchain.prompts.chat import ChatPromptTemplate, HumanMessagePromptTemplate, SystemMessagePromptTemplate
+    llm = QianfanLLMEndpoint(
+        streaming=True, 
+        model="ERNIE-Bot-turbo",
+        endpoint="eb-instant",
+        )
+    retriever = vector_store.as_retriever( # the vs can return documents
+    search_type='similarity', search_kwargs={'k': 3})
+    
+    general_system_template = f""" 
+    You are an assistant named Ernie. You are examining a document and the previous chat history. Use only the heading and piece of context to answer the questions at the end. If you don't know the answer, just say that you don't know, don't try to make up an answer. Do not add any observations or comments. Answer only in Chinese.
+    ----
+    HEADING: ({document_description})
+    CONTEXT: {{context}}
+    ----
+    """
+    general_user_template = "Here is the chat history ```{chat_history}```, do a conversation summary based on the chat history and the document. Remember to only answer if you can from the provided context. Only respond in Chinese. "
+    messages = [
+                SystemMessagePromptTemplate.from_template(general_system_template),
+                HumanMessagePromptTemplate.from_template(general_user_template)
+    ]
+    qa_prompt = ChatPromptTemplate.from_messages( messages )
+
+    crc = ConversationalRetrievalChain.from_llm(llm, retriever, combine_docs_chain_kwargs={'prompt': qa_prompt})
+    summary = crc({'chat_history': chat_history})
+    return summary
 
 def clear_history():
     if "history" in st.session_state:
@@ -112,14 +136,12 @@ if __name__ == "__main__":
     with st.form(key="myform", clear_on_submit=True):
         q = st.text_input("请输入你的问题：", key="user_question")
         submit_button = st.form_submit_button("提交")
-
+        end_button = st.form_submit_button("结束对话")
     # If user entered a question
     if submit_button:
         if "vector_store" in st.session_state:
             vector_store = st.session_state["vector_store"]
-
             result = ask_with_memory(vector_store, q, st.session_state.history, st.session_state.document_description)
-
             # If there are n or more messages, remove the first element of the array
             if len(st.session_state.history) >= st.session_state.chat_context_length:
                 st.session_state.history = st.session_state.history[1:]
@@ -146,3 +168,14 @@ if __name__ == "__main__":
             """
 
             components.html(js)
+
+    # If user choose to end the conversation
+    if end_button:
+        if "vector_store" in st.session_state:
+            vector_store = st.session_state["vector_store"]
+            summary = ask_for_summary(vector_store, st.session_state.history, st.session_state.document_description)
+            st.write(summary)
+        else:
+            st.write("There is nothing to be summarised")
+
+
