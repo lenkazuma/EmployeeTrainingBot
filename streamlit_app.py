@@ -169,14 +169,15 @@ if __name__ == "__main__":
 
             components.html(js)
         end_button = st.button("结束对话")
+            # If user choose to end the conversation
+        if end_button:
+            if "vector_store" in st.session_state:
+                vector_store = st.session_state["vector_store"]
+                summary = ask_for_summary(vector_store, st.session_state.history, st.session_state.document_description)
+                st.write(summary['answer'])
+            else:
+                st.write("There is nothing to be summarised")
     
-    # If user choose to end the conversation
-    if end_button:
-        if "vector_store" in st.session_state:
-            vector_store = st.session_state["vector_store"]
-            summary = ask_for_summary(vector_store, st.session_state.history, st.session_state.document_description)
-            st.write(summary['answer'])
-        else:
-            st.write("There is nothing to be summarised")
+
 
 
