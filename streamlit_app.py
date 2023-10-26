@@ -136,7 +136,7 @@ if __name__ == "__main__":
     with st.form(key="myform", clear_on_submit=True):
         q = st.text_input("请输入你的问题：", key="user_question")
         submit_button = st.form_submit_button("提交问题")
-        end_button = st.form_submit_button("结束对话")
+    
     # If user entered a question
     if submit_button:
         if "vector_store" in st.session_state:
@@ -168,13 +168,14 @@ if __name__ == "__main__":
             """
 
             components.html(js)
-
+        end_button = st.button("结束对话")
+    
     # If user choose to end the conversation
     if end_button:
         if "vector_store" in st.session_state:
             vector_store = st.session_state["vector_store"]
             summary = ask_for_summary(vector_store, st.session_state.history, st.session_state.document_description)
-            st.write(summary)
+            st.write(summary['answer'])
         else:
             st.write("There is nothing to be summarised")
 
