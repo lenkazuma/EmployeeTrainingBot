@@ -1,21 +1,18 @@
 import os
+import streamlit as st
 from langchain.vectorstores import Chroma
 from langchain.embeddings import QianfanEmbeddingsEndpoint
+from langchain.llms import QianfanLLMEndpoint
 from langchain_wenxin.llms import Wenxin
 import streamlit.components.v1 as components
-import streamlit as st
-import glob
 import sys
-from PyPDF2 import PdfReader
+
 from langchain.document_loaders import PyPDFLoader
 __import__('pysqlite3')
 sys.modules['sqlite3'] = sys.modules.pop('pysqlite3')
 
-llm = Wenxin(model="ernie-bot-turbo")
 
 # chunk the data
-
-
 def chunk_data(data, chunk_size):
     from langchain.text_splitter import RecursiveCharacterTextSplitter
     text_splitter = RecursiveCharacterTextSplitter(
@@ -27,65 +24,34 @@ def chunk_data(data, chunk_size):
     return chunks
 
 # Create embeddings in chroma db
-
-
 def create_embeddings(chunks):
-
     print("Embedding to Chroma DB...")
     embeddings = QianfanEmbeddingsEndpoint()
     vector_store = Chroma.from_documents(documents=chunks, embedding=embeddings)
     print("Done")
     return vector_store
 
-# get answer from chatGPT, increase k for more elaborate answers
-
-
-def ask_and_get_answer(vector_store, q, k=3):
-    from langchain.chains import RetrievalQA
-    from langchain.chat_models import ErnieBotChat
-    from langchain.prompts import PromptTemplate
-    llm = Wenxin(model="ernie-bot-turbo")
-
-    retriever = vector_store.as_retriever(
-        search_type="similarity", search_kwargs={'k': k})
-
-    prompt_template = """You are are examining a document. Use only the following piece of context to answer the questions at the end. If you don't know the answer, just say that you don't know, don't try to make up an answer. Do not add any observations or comments. Answer only in English".
-    
-    CONTEXT {context}
-
-    QUESTION: {question}
-    """
-    PROMPT = PromptTemplate(
-        template=prompt_template, input_variables=["context", "question"]
-    )
-    chain_type_kwargs = {"prompt": PROMPT}
-
-    chain = RetrievalQA.from_chain_type(
-        llm=llm, chain_type="stuff", retriever=retriever, chain_type_kwargs=chain_type_kwargs)
-    answer = chain.run(q)
-    return answer
-
-
 def ask_with_memory(vector_store, question, chat_history=[], document_description=""):
     from langchain.chains import ConversationalRetrievalChain
-    from langchain.chat_models import ErnieBotChat
     from langchain.prompts.chat import ChatPromptTemplate, HumanMessagePromptTemplate, SystemMessagePromptTemplate
 
-    #llm = ErnieBotChat()
-    llm = Wenxin(model="ernie-bot-turbo")
-
+    #llm = Wenxin(model="ernie-bot-turbo")
+    llm = QianfanLLMEndpoint(
+        streaming=True, 
+        model="ERNIE-Bot-turbo",
+        endpoint="eb-instant",
+        )
     retriever = vector_store.as_retriever( # the vs can return documents
     search_type='similarity', search_kwargs={'k': 3})
  
     general_system_template = f""" 
-    You are examining a document. Use only the heading and piece of context to answer the questions at the end. If you don't know the answer, just say that you don't know, don't try to make up an answer. Do not add any observations or comments. Answer only in Chinese.
+    You are an assistant named Ernie. You are examining a document. Use only the heading and piece of context to answer the questions at the end. If you don't know the answer, just say that you don't know, don't try to make up an answer. Do not add any observations or comments. Answer only in Chinese.
     ----
     HEADING: ({document_description})
     CONTEXT: {{context}}
     ----
     """
     general_user_template = "Here is the next question, remember to only answer if you can from the provided context. Only respond in Chinese. QUESTION:```{question}```"
-
     messages = [
                 SystemMessagePromptTemplate.from_template(general_system_template),
                 HumanMessagePromptTemplate.from_template(general_user_template)
@@ -124,7 +90,7 @@ if __name__ == "__main__":
 
     loader = PyPDFLoader("http://static.cninfo.com.cn/finalpage/2023-04-29/1216686497.PDF")
     data = loader.load()
-    st.session_state.document_description = "这是一篇财报"
+    st.session_state.document_description = "万科企业股份有限公司2023年第一季度报告"
     st.session_state.chat_context_length = 10
     
     chunks = chunk_data(data, 384)
@@ -136,14 +102,13 @@ if __name__ == "__main__":
 
     if "history" not in st.session_state:
         st.session_state.history = []
-
-    # Create an empty text area at the start
-    chat_history_placeholder.text_area(
-        label="对话记录", value="", height=400)
+        chat_history_placeholder.text_area(label="你好，我是文心智能助理Ernie。请问你有什么问题呢？", value="", height=400)
+    else:
+        chat_history_placeholder.text_area(label="你好，我是文心智能助理Ernie。请问你有什么问题呢？", value=format_chat_history(st.session_state.history)  , height=400)
 
     # User input for the question
     with st.form(key="myform", clear_on_submit=True):
-        q = st.text_input("问一个问题", key="user_question")
+        q = st.text_input("请输入你的问题：", key="user_question")
         submit_button = st.form_submit_button("提交")
 
     # If user entered a question
@@ -163,8 +128,7 @@ if __name__ == "__main__":
             chat_history_str = format_chat_history(st.session_state.history)            
 
             # Update the chat history in the placeholder as a text area
-            chat_history_placeholder.text_area(
-                label="对话记录", value=chat_history_str, height=400)
+            chat_history_placeholder.text_area(label="你好，我是文心智能助理Ernie。请问你有什么问题呢？",value=chat_history_str, height=400)
 
             # JavaScript code to scroll the text area to the bottom
             js = f"""
