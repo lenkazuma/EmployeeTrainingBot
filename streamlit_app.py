@@ -137,15 +137,19 @@ if __name__ == "__main__":
         q = st.text_input("请输入你的问题：", key="user_question")
         submit_button = st.form_submit_button("提交问题")
     
-    col1, col2, col3 = st.columns(3)
+    col1, col2, col3,col4, col5 = st.columns(5)
     with col1:
         pass
     with col2:
-        end_button = st.button("结束对话")
-    with col3 :
         pass
-    
-    # If user entered a question
+    with col3 :
+        end_button = st.button("结束对话")
+    with col4 :
+        pass
+    with col5 :
+        pass
+    # If user en
+    # tered a question
     if submit_button:
         if "vector_store" in st.session_state:
             vector_store = st.session_state["vector_store"]
