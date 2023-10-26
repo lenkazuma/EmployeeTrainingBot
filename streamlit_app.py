@@ -88,13 +88,15 @@ if __name__ == "__main__":
     )
     st.subheader("万科企业股份有限公司2023年第一季度报告")
 
-    loader = PyPDFLoader("http://static.cninfo.com.cn/finalpage/2023-04-29/1216686497.PDF")
-    data = loader.load()
+    st.session_state.data = ""
     st.session_state.document_description = "万科企业股份有限公司2023年第一季度报告"
     st.session_state.chat_context_length = 10
+    if not st.session_state.data:
+        loader = PyPDFLoader("http://static.cninfo.com.cn/finalpage/2023-04-29/1216686497.PDF")
+        data = loader.load()
+
     
-    chunks = chunk_data(data, 384)
-                
+    chunks = chunk_data(st.session_state.data, 384)
     st.session_state.vector_store = create_embeddings(chunks)
 
     # Create the placeholder for chat history
