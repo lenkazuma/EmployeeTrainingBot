@@ -85,7 +85,7 @@ def ask_for_summary(vector_store, chat_history=[], document_description=""):
     qa_prompt = ChatPromptTemplate.from_messages( messages )
 
     crc = ConversationalRetrievalChain.from_llm(llm, retriever, combine_docs_chain_kwargs={'prompt': qa_prompt})
-    summary = crc({'chat_history': chat_history})
+    summary = crc({'question': "Give me a summary of the conversation", 'chat_history': chat_history})
     return summary
 
 def clear_history():
@@ -135,7 +135,7 @@ if __name__ == "__main__":
     # User input for the question
     with st.form(key="myform", clear_on_submit=True):
         q = st.text_input("请输入你的问题：", key="user_question")
-        submit_button = st.form_submit_button("提交")
+        submit_button = st.form_submit_button("提交问题")
         end_button = st.form_submit_button("结束对话")
     # If user entered a question
     if submit_button:
