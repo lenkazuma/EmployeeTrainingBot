@@ -54,7 +54,8 @@ def ask_with_memory(vector_store, question, chat_history=[], document_descriptio
     ]
     qa_prompt = ChatPromptTemplate.from_messages( messages )
 
-
+    st.write(qa_prompt)
+    st.write(retriever)
     crc = ConversationalRetrievalChain.from_llm(llm, retriever, combine_docs_chain_kwargs={'prompt': qa_prompt})
     result = crc({'question': question, 'chat_history': chat_history})
     return result
@@ -91,7 +92,6 @@ def ask_for_summary(vector_store, chat_history=[], document_description=""):
 def clear_history():
     if "history" in st.session_state:
         del st.session_state["history"]
-
 
 def format_chat_history(chat_history):
     formatted_history = ""
