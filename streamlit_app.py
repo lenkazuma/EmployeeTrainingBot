@@ -3,12 +3,35 @@ import streamlit as st
 from langchain.vectorstores import Chroma
 from langchain.embeddings import QianfanEmbeddingsEndpoint
 from langchain.llms import QianfanLLMEndpoint
+from langchain.chains import LLMMathChain
 import streamlit.components.v1 as components
 import sys
 
 from langchain.document_loaders import PyPDFLoader
 __import__('pysqlite3')
 sys.modules['sqlite3'] = sys.modules.pop('pysqlite3')
+
+from langchain.chains import ConversationalRetrievalChain
+from langchain.prompts.chat import ChatPromptTemplate, HumanMessagePromptTemplate, SystemMessagePromptTemplate
+llm = QianfanLLMEndpoint(
+    streaming=True, 
+    model="ERNIE-Bot-turbo",
+    endpoint="eb-instant",
+    )
+
+llm_math_chain = LLMMathChain.from_llm(llm=llm, verbose=True)
+
+tools = [
+    Tool(
+        name="Calculator",
+        func=llm_math_chain.run,
+        description="useful for when you need to answer questions about math",
+    )，
+]
+from langchain.agents import initialize_agent, AgentType, Tool
+from langchain.tools.render import format_tool_to_openai_function
+from langchain.agents import AgentExecutor
+llm_with_tools = llm.bind(functions=[format_tool_to_openai_function(t) for t in tools])
 
 # chunk the data
 def chunk_data(data, chunk_size):
@@ -30,13 +53,6 @@ def create_embeddings(chunks):
     return vector_store
 
 def ask_with_memory(vector_store, question, chat_history=[], document_description=""):
-    from langchain.chains import ConversationalRetrievalChain
-    from langchain.prompts.chat import ChatPromptTemplate, HumanMessagePromptTemplate, SystemMessagePromptTemplate
-    llm = QianfanLLMEndpoint(
-        streaming=True, 
-        model="ERNIE-Bot-turbo",
-        endpoint="eb-instant",
-        )
     retriever = vector_store.as_retriever( # the vs can return documents
     search_type='similarity', search_kwargs={'k': 3})
  
