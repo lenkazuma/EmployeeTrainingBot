@@ -280,8 +280,8 @@ def eb_call(prompt, round):
     st.write(response)
     return response
 
-chat_comp = qianfan.ChatCompletion(ak="LrQvpiE6f4npsUwEvPL9vEWF", sk="CHTwBMVM0DlwyoGTLGEyRviBdctgOv4G")
-prompt = "百度大厦-北京海淀区上地十街10号的附近，午餐有哪些推荐？###能不能帮我点一个20元以内的？###"
+chat_comp = qianfan.ChatCompletion()
+prompt = "北京海淀区上地十街10号百度大厦的附近，午餐有哪些推荐？###能不能帮我点一个20元以内的？###"
 prompt_list = re.split(r"###", prompt)
 
 for questions in prompt_list:
