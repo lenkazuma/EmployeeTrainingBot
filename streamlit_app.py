@@ -86,8 +86,8 @@ def ask_for_document_summary(vector_store, document_description=""):
     pdf_summary = "Give me a concise summary, use the language that the file is in. "
 
     crc = ConversationalRetrievalChain.from_llm(llm, retriever, combine_docs_chain_kwargs={'prompt': qa_prompt})
-    result = crc({'question': pdf_summary, 'chat_history': []})
-    return result
+    document_summary = crc({'question': pdf_summary, 'chat_history': []})
+    return document_summary['answer']
 
 
 def ask_for_summary(vector_store, chat_history=[], document_description=""):
