@@ -88,7 +88,7 @@ def ask_for_document_summary(vector_store, document_description=""):
     crc = ConversationalRetrievalChain.from_llm(llm, retriever, combine_docs_chain_kwargs={'prompt': qa_prompt})
     st.write(crc)
     chat_history=[]
-    document_summary = crc({'question': pdf_summary，'chat_history': chat_history})
+    document_summary = crc({'question': pdf_summary,'chat_history': chat_history})
     st.write(document_summary）
     return document_summary['answer']
 
