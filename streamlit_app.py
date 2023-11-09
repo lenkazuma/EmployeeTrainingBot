@@ -69,28 +69,27 @@ def ask_for_document_summary(vector_store, document_description=""):
     retriever = vector_store.as_retriever( # the vs can return documents
     search_type='similarity', search_kwargs={'k': 3})
  
-    general_system_template = f""" 
-    You are an assistant named Ernie. You are examining a document. Use only the heading and piece of context to answer the questions at the end. If you don't know the answer, just say that you don't know, don't try to make up an answer. Do not add any observations or comments. Answer only in Chinese.
+    prompt_template = f""" 
+    You are an assistant named Ernie. You are examining a document. Use only the heading and piece of context to do the summary.  Answer only in Chinese.
     ----
     HEADING: ({document_description})
     CONTEXT: {{context}}
     ----
     """
-    general_user_template = "Do a summary of the document, remember to only answer if you can from the provided context. Only respond in Chinese. "
-    messages = [
-                SystemMessagePromptTemplate.from_template(general_system_template),
-                HumanMessagePromptTemplate.from_template(general_user_template)
-    ]
-    qa_prompt = ChatPromptTemplate.from_messages( messages )
-
-    pdf_summary = "Give me a concise summary of the document, use the language that the file is in. "
-
-    crc = ConversationalRetrievalChain.from_llm(llm, retriever, combine_docs_chain_kwargs={'prompt': qa_prompt})
-    st.write(crc)
-    chat_history=[]
-    document_summary = crc({'question': pdf_summary,'chat_history': chat_history})
+    from langchain import PromptTemplate
+    from langchain.chains import RetrievalQA
+    prompt = PromptTemplate(template=prompt_template, input_variables=["context", "question"])
+    chain_type_kwargs = {"prompt": prompt, "verbose":True}
+    retriever = vector_store.as_retriever()
+    pdf_summary = "Give me a concise summary of the document, only respond in Chinese. "
+    qa = RetrievalQA.from_chain_type(llm=llm_model,
+                                 chain_type="stuff",
+                                 retriever=retriever,
+                                 chain_type_kwargs=chain_type_kwargs
+                                 )
+    document_summary=qa.run(pdf_summary)
     st.write(document_summary)
-    return document_summary['answer']
+    return document_summary
 
 
 def ask_for_summary(vector_store, chat_history=[], document_description=""):
@@ -159,7 +158,7 @@ if __name__ == "__main__":
 
     if "summary" not in st.session_state:
         #st.session_state.summary = []
-        st.session_state.summary = ask_for_document_summary(st.session_state["vector_store"], st.session_state.document_description)
+        st.session_state.summary = ask_for_document_summary(st.session_state["vector_store"],st.session_state.document_description)
         st.write(st.session_state.summary)
 
     # Create the placeholder for chat history
