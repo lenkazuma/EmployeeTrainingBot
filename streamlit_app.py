@@ -83,10 +83,11 @@ def ask_for_document_summary(vector_store, document_description=""):
     ]
     qa_prompt = ChatPromptTemplate.from_messages( messages )
 
-    pdf_summary = "Give me a concise summary, use the language that the file is in. "
+    pdf_summary = "Give me a concise summary of the document, use the language that the file is in. "
 
     crc = ConversationalRetrievalChain.from_llm(llm, retriever, combine_docs_chain_kwargs={'prompt': qa_prompt})
-    document_summary = crc({'question': pdf_summary, 'chat_history': []})
+    st.write(crc)
+    document_summary = crc({'question': pdf_summary})
     return document_summary['answer']
 
 
