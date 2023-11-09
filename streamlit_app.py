@@ -1,4 +1,3 @@
-import os
 import streamlit as st
 from langchain.vectorstores import Chroma
 from langchain.embeddings import QianfanEmbeddingsEndpoint
@@ -6,7 +5,6 @@ from langchain.llms import QianfanLLMEndpoint
 from langchain.chains import LLMMathChain
 import streamlit.components.v1 as components
 import sys
-
 
 from langchain.document_loaders import PyPDFLoader
 __import__('pysqlite3')
@@ -66,8 +64,7 @@ def ask_with_memory(vector_store, question, chat_history=[], document_descriptio
     return result
 
 def ask_for_document_summary(vector_store, question,document_description=""):
-    retriever = vector_store.as_retriever( # the vs can return documents
-    search_type='similarity', search_kwargs={'k': 3})
+
  
     prompt_template = f""" 
     You are an assistant named Ernie. You are examining a document. Use only the heading and piece of context to do the summary.  Answer only in Chinese.
@@ -81,7 +78,7 @@ def ask_for_document_summary(vector_store, question,document_description=""):
     from langchain.chat_models import ErnieBotChat
     prompt = PromptTemplate(template=prompt_template, input_variables=["context", "question"])
     chain_type_kwargs = {"prompt": prompt, "verbose":True}
-    
+    retriever = vector_store.as_retriever(search_type='similarity', search_kwargs={'k': 3})
     qa = RetrievalQA.from_chain_type(llm=ErnieBotChat(model_name='ERNIE-Bot-turbo',temperature=0.75,),
                                  chain_type="stuff",
                                  retriever=retriever,
