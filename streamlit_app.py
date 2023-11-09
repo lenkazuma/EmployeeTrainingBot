@@ -65,7 +65,7 @@ def ask_with_memory(vector_store, question, chat_history=[], document_descriptio
     result = crc({'question': question, 'chat_history': chat_history})
     return result
 
-def ask_for_document_summary(vector_store, document_description=""):
+def ask_for_document_summary(vector_store, question,document_description=""):
     retriever = vector_store.as_retriever( # the vs can return documents
     search_type='similarity', search_kwargs={'k': 3})
  
@@ -80,13 +80,13 @@ def ask_for_document_summary(vector_store, document_description=""):
     from langchain.chains import RetrievalQA
     prompt = PromptTemplate(template=prompt_template, input_variables=["context", "question"])
     chain_type_kwargs = {"prompt": prompt, "verbose":True}
-    pdf_summary = "Give me a concise summary of the document, only respond in Chinese. "
+    
     qa = RetrievalQA.from_chain_type(llm=llm,
                                  chain_type="stuff",
                                  retriever=retriever,
                                  chain_type_kwargs=chain_type_kwargs
                                  )
-    document_summary=qa.run(pdf_summary)
+    document_summary=qa.run(question)
     st.write(document_summary)
     return document_summary
 
@@ -157,7 +157,8 @@ if __name__ == "__main__":
 
     if "summary" not in st.session_state:
         #st.session_state.summary = []
-        st.session_state.summary = ask_for_document_summary(st.session_state["vector_store"],st.session_state.document_description)
+        pdf_summary = "Give me a concise summary of the document, only respond in Chinese. "
+        st.session_state.summary = ask_for_document_summary(st.session_state["vector_store"],pdf_summary,st.session_state.document_description)
         st.write(st.session_state.summary)
 
     # Create the placeholder for chat history
