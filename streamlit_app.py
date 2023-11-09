@@ -80,9 +80,8 @@ def ask_for_document_summary(vector_store, document_description=""):
     from langchain.chains import RetrievalQA
     prompt = PromptTemplate(template=prompt_template, input_variables=["context", "question"])
     chain_type_kwargs = {"prompt": prompt, "verbose":True}
-    retriever = vector_store.as_retriever()
     pdf_summary = "Give me a concise summary of the document, only respond in Chinese. "
-    qa = RetrievalQA.from_chain_type(llm=llm_model,
+    qa = RetrievalQA.from_chain_type(llm=llm,
                                  chain_type="stuff",
                                  retriever=retriever,
                                  chain_type_kwargs=chain_type_kwargs
