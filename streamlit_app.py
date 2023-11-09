@@ -78,10 +78,11 @@ def ask_for_document_summary(vector_store, question,document_description=""):
     """
     from langchain import PromptTemplate
     from langchain.chains import RetrievalQA
+    from langchain.chat_models import ErnieBotChat
     prompt = PromptTemplate(template=prompt_template, input_variables=["context", "question"])
     chain_type_kwargs = {"prompt": prompt, "verbose":True}
     
-    qa = RetrievalQA.from_chain_type(llm=llm,
+    qa = RetrievalQA.from_chain_type(llm=ErnieBotChat(model_name='ERNIE-Bot-turbo',temperature=0.75,),
                                  chain_type="stuff",
                                  retriever=retriever,
                                  chain_type_kwargs=chain_type_kwargs
