@@ -89,7 +89,7 @@ def ask_for_document_summary(vector_store, document_description=""):
     st.write(crc)
     chat_history=[]
     document_summary = crc({'question': pdf_summary,'chat_history': chat_history})
-    st.write(document_summary）
+    st.write(document_summary)
     return document_summary['answer']
 
 
