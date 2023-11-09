@@ -64,8 +64,6 @@ def ask_with_memory(vector_store, question, chat_history=[], document_descriptio
     return result
 
 def ask_for_document_summary(vector_store, question,document_description=""):
-
- 
     prompt_template = f""" 
     You are an assistant named Ernie. You are examining a document. Use only the heading and piece of context to do the summary.  Answer only in Chinese.
     ----
