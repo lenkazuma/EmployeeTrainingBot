@@ -221,8 +221,8 @@ if __name__ == "__main__":
     if end_button:
         if "vector_store" in st.session_state:
             vector_store = st.session_state["vector_store"]
-            summary = ask_for_summary(vector_store, st.session_state.history, st.session_state.document_description)
-            st.write(summary['answer'])
+            chat_summary = ask_for_summary(vector_store, st.session_state.history, st.session_state.document_description)
+            st.write(chat_summary['answer'])
         else:
             st.write("There is nothing to be summarised")
     
