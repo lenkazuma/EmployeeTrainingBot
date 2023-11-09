@@ -157,10 +157,10 @@ if __name__ == "__main__":
     # Create the placeholder for chat history
     chat_history_placeholder = st.empty()
 
-    if "summary" not in st.session_state:
-        #st.session_state.summary = []
-        st.session_state.summary = ask_for_document_summary(st.session_state.vector_store, st.session_state.document_description)
-        st.write(st.session_state.summary)
+    # if "summary" not in st.session_state:
+    #     #st.session_state.summary = []
+    #     st.session_state.summary = ask_for_document_summary(st.session_state.vector_store, st.session_state.document_description)
+    #     st.write(st.session_state.summary)
 
     if "history" not in st.session_state:
         st.session_state.history = []
