@@ -156,7 +156,8 @@ if __name__ == "__main__":
         pdf_summary = "Give me a concise summary of the document, only respond in Chinese. "
         st.session_state.summary = ask_for_document_summary(st.session_state["vector_store"],pdf_summary,st.session_state.document_description)
         st.write(st.session_state.summary)
-
+    else:
+        st.write(st.session_state.summary)
     # Create the placeholder for chat history
     chat_history_placeholder = st.empty()
 
