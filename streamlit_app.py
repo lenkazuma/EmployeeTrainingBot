@@ -15,7 +15,7 @@ from langchain.prompts.chat import ChatPromptTemplate, HumanMessagePromptTemplat
 
 llm = QianfanLLMEndpoint(
     streaming=True, 
-    model="ERNIE-Bot-turbo",
+    model="ERNIE-Speed",
     endpoint="eb-instant",
     )
 
@@ -92,7 +92,7 @@ def ask_for_summary(vector_store, chat_history=[], document_description=""):
     from langchain.prompts.chat import ChatPromptTemplate, HumanMessagePromptTemplate, SystemMessagePromptTemplate
     llm = QianfanLLMEndpoint(
         streaming=True, 
-        model="ERNIE-Bot-turbo",
+        model="ERNIE-speed",
         endpoint="eb-instant",
         )
     retriever = vector_store.as_retriever( # the vs can return documents
