@@ -138,13 +138,15 @@ if __name__ == "__main__":
     page_title="Home",
     page_icon="🏠",
     )
-    st.subheader("万科企业股份有限公司2023年第一季度报告")
-
+    #st.subheader("万科企业股份有限公司2023年第一季度报告")
+    st.subheader("比亚迪ATTO3车型说明书助手")
     
-    st.session_state.document_description = "万科企业股份有限公司2023年第一季度报告"
+    #st.session_state.document_description = "万科企业股份有限公司2023年第一季度报告"
+    st.session_state.document_description = "比亚迪ATTO3车型说明书助手"
     st.session_state.chat_context_length = 10
     if "data" not in st.session_state:
-        loader = PyPDFLoader("http://static.cninfo.com.cn/finalpage/2023-04-29/1216686497.PDF")
+        #loader = PyPDFLoader("http://static.cninfo.com.cn/finalpage/2023-04-29/1216686497.PDF")
+        loader = PyPDFLoader("https://bydautomotive.com.au/brochures/BYD-ATTO-3-Owners-Handbook-2022.pdf")
         st.session_state.data = loader.load()
 
     
