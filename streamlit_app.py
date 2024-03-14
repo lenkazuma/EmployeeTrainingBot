@@ -3,7 +3,6 @@ import streamlit.components.v1 as components
 from langchain.vectorstores import Chroma
 from langchain.embeddings import QianfanEmbeddingsEndpoint
 from langchain.llms import QianfanLLMEndpoint
-from langchain.llms import QianfanLLMEndpoint
 from langchain.chains import RetrievalQA
 from langchain.prompts import PromptTemplate
 from langchain import PromptTemplate
