@@ -88,34 +88,34 @@ def ask_for_document_summary(vector_store, question,document_description=""):
     return document_summary
 
 
-def ask_for_summary(vector_store, chat_history=[], document_description=""):
-    from langchain.chains import ConversationalRetrievalChain
-    from langchain.prompts.chat import ChatPromptTemplate, HumanMessagePromptTemplate, SystemMessagePromptTemplate
-    llm = QianfanLLMEndpoint(
-        streaming=True, 
-        model="ERNIE-speed",
-        endpoint="eb-instant",
-        )
-    retriever = vector_store.as_retriever( # the vs can return documents
-    search_type='similarity', search_kwargs={'k': 3})
+# def ask_for_summary(vector_store, chat_history=[], document_description=""):
+#     from langchain.chains import ConversationalRetrievalChain
+#     from langchain.prompts.chat import ChatPromptTemplate, HumanMessagePromptTemplate, SystemMessagePromptTemplate
+#     llm = QianfanLLMEndpoint(
+#         streaming=True, 
+#         model="ERNIE-speed",
+#         endpoint="eb-instant",
+#         )
+#     retriever = vector_store.as_retriever( # the vs can return documents
+#     search_type='similarity', search_kwargs={'k': 3})
     
-    general_system_template = f""" 
-    You are an assistant named Ernie. You are examining a document and the previous chat history. Use only the heading and piece of context to answer the questions at the end. If you don't know the answer, just say that you don't know, don't try to make up an answer. Do not add any observations or comments. Answer only in Chinese.
-    ----
-    HEADING: ({document_description})
-    CONTEXT: {{context}}
-    ----
-    """
-    general_user_template = "Here is the chat history ```{chat_history}```, do a conversation summary based on the chat history and the document. Remember to only answer if you can from the provided context. Only respond in Chinese. "
-    messages = [
-                SystemMessagePromptTemplate.from_template(general_system_template),
-                HumanMessagePromptTemplate.from_template(general_user_template)
-    ]
-    qa_prompt = ChatPromptTemplate.from_messages( messages )
+#     general_system_template = f""" 
+#     You are an assistant named Ernie. You are examining a document and the previous chat history. Use only the heading and piece of context to answer the questions at the end. If you don't know the answer, just say that you don't know, don't try to make up an answer. Do not add any observations or comments. Answer only in Chinese.
+#     ----
+#     HEADING: ({document_description})
+#     CONTEXT: {{context}}
+#     ----
+#     """
+#     general_user_template = "Here is the chat history ```{chat_history}```, do a conversation summary based on the chat history and the document. Remember to only answer if you can from the provided context. Only respond in Chinese. "
+#     messages = [
+#                 SystemMessagePromptTemplate.from_template(general_system_template),
+#                 HumanMessagePromptTemplate.from_template(general_user_template)
+#     ]
+#     qa_prompt = ChatPromptTemplate.from_messages( messages )
 
-    crc = ConversationalRetrievalChain.from_llm(llm, retriever, combine_docs_chain_kwargs={'prompt': qa_prompt})
-    summary = crc({'question': "Give me a summary of the conversation", 'chat_history': chat_history})
-    return summary
+#     crc = ConversationalRetrievalChain.from_llm(llm, retriever, combine_docs_chain_kwargs={'prompt': qa_prompt})
+#     summary = crc({'question': "Give me a summary of the conversation", 'chat_history': chat_history})
+#     return summary
 
 def clear_history():
     if "history" in st.session_state:
@@ -154,13 +154,13 @@ if __name__ == "__main__":
     chunks = chunk_data(st.session_state.data, 384)
     st.session_state.vector_store = create_embeddings(chunks)
 
-    if "summary" not in st.session_state:
-        #st.session_state.summary = []
-        pdf_summary = "Give me a concise summary of the document, only respond in Chinese. "
-        st.session_state.summary = ask_for_document_summary(st.session_state["vector_store"],pdf_summary,st.session_state.document_description)
-        st.write(st.session_state.summary)
-    else:
-        st.write(st.session_state.summary)
+    # if "summary" not in st.session_state:
+    #     #st.session_state.summary = []
+    #     pdf_summary = "Give me a concise summary of the document, only respond in Chinese. "
+    #     st.session_state.summary = ask_for_document_summary(st.session_state["vector_store"],pdf_summary,st.session_state.document_description)
+    #     st.write(st.session_state.summary)
+    # else:
+    #     st.write(st.session_state.summary)
     # Create the placeholder for chat history
     chat_history_placeholder = st.empty()
 
