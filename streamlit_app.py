@@ -74,7 +74,6 @@ def ask_for_document_summary(vector_store, question,document_description=""):
     """
     from langchain import PromptTemplate
     from langchain.chains import RetrievalQA
-    from langchain_community.chat_models import QianfanLLMEndpoint
     llm = QianfanLLMEndpoint(
         streaming=True, 
         model="ERNIE-speed",
