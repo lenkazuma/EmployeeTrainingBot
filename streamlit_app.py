@@ -2,6 +2,7 @@ import streamlit as st
 from langchain.vectorstores import Chroma
 from langchain.embeddings import QianfanEmbeddingsEndpoint
 from langchain.llms import QianfanLLMEndpoint
+
 from langchain.chains import LLMMathChain
 import streamlit.components.v1 as components
 import sys
@@ -73,12 +74,11 @@ def ask_for_document_summary(vector_store, question,document_description=""):
     """
     from langchain import PromptTemplate
     from langchain.chains import RetrievalQA
-    #from langchain.chat_models import ErnieBotChat
     from langchain_community.chat_models import QianfanChatEndpoint
     prompt = PromptTemplate(template=prompt_template, input_variables=["context", "question"])
     chain_type_kwargs = {"prompt": prompt, "verbose":True}
     retriever = vector_store.as_retriever(search_type='similarity', search_kwargs={'k': 3})
-    qa = RetrievalQA.from_chain_type(llm=QianfanChatEndpoint(streaming=True,model_name='ERNIE-Bot',temperature=0.75),
+    qa = RetrievalQA.from_chain_type(llm=QianfanChatEndpoint(streaming=True,model_name='ERNIE-speed',temperature=0.75),
                                  chain_type="stuff",
                                  retriever=retriever,
                                  chain_type_kwargs=chain_type_kwargs
