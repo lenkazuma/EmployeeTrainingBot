@@ -20,7 +20,7 @@ from langchain.prompts.chat import ChatPromptTemplate, HumanMessagePromptTemplat
 llm = QianfanLLMEndpoint(
     streaming=True, 
     model="ERNIE-Bot",
-    endpoint="eb-instant",
+    endpoint="eb-instant"
     )
 
 
