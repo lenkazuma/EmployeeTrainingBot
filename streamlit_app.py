@@ -74,15 +74,16 @@ def ask_for_document_summary(vector_store, question,document_description=""):
     """
     from langchain import PromptTemplate
     from langchain.chains import RetrievalQA
-    from langchain_community.chat_models import QianfanChatEndpoint
+    from langchain_community.chat_models import QianfanLLMEndpoint
+    llm = QianfanLLMEndpoint(
+        streaming=True, 
+        model="ERNIE-speed",
+        endpoint="eb-instant",
+        )
     prompt = PromptTemplate(template=prompt_template, input_variables=["context", "question"])
     chain_type_kwargs = {"prompt": prompt, "verbose":True}
-    retriever = vector_store.as_retriever(search_type='similarity', search_kwargs={'k': 3})
-    qa = RetrievalQA.from_chain_type(llm=QianfanChatEndpoint(streaming=True,model_name='ERNIE-speed',temperature=0.75),
-                                 chain_type="stuff",
-                                 retriever=retriever,
-                                 chain_type_kwargs=chain_type_kwargs
-                                 )
+    retriever = vector_store.as_retriever(search_type='similarity', search_kwargs={'k': 5})
+    qa = RetrievalQA.from_chain_type(llm=llm,chain_type="stuff",retriever=retriever,chain_type_kwargs=chain_type_kwargs)
     document_summary=qa.run(question)
     st.write(document_summary)
     return document_summary
