@@ -92,9 +92,7 @@ def ask_for_summary(vector_store, chat_history=[], document_description=""):
     from langchain.prompts.chat import ChatPromptTemplate, HumanMessagePromptTemplate, SystemMessagePromptTemplate
     llm = QianfanLLMEndpoint(
         streaming=True, 
-        model="ERNIE-speed",
-        endpoint="eb-instant",
-        )
+        model="ERNIE-bot")
     retriever = vector_store.as_retriever( # the vs can return documents
     search_type='similarity', search_kwargs={'k': 3})
     
