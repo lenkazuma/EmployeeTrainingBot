@@ -1,13 +1,16 @@
 import streamlit as st
+import streamlit.components.v1 as components
 from langchain.vectorstores import Chroma
 from langchain.embeddings import QianfanEmbeddingsEndpoint
 from langchain.llms import QianfanLLMEndpoint
-
-from langchain.chains import LLMMathChain
-import streamlit.components.v1 as components
+from langchain.llms import QianfanLLMEndpoint
+from langchain.chains import RetrievalQA
+from langchain.prompts import PromptTemplate
+from langchain import PromptTemplate
+from langchain.text_splitter import RecursiveCharacterTextSplitter
+from langchain.document_loaders import PyPDFLoader
 import sys
 
-from langchain.document_loaders import PyPDFLoader
 __import__('pysqlite3')
 sys.modules['sqlite3'] = sys.modules.pop('pysqlite3')
 
@@ -23,7 +26,6 @@ llm = QianfanLLMEndpoint(
 
 # chunk the data
 def chunk_data(data, chunk_size):
-    from langchain.text_splitter import RecursiveCharacterTextSplitter
     text_splitter = RecursiveCharacterTextSplitter(
         chunk_size=chunk_size,
         chunk_overlap=200,
@@ -43,7 +45,6 @@ def create_embeddings(chunks):
 def ask_with_memory(vector_store, question, chat_history=[], document_description=""):
     retriever = vector_store.as_retriever( # the vs can return documents
     search_type='similarity', search_kwargs={'k': 3})
- 
     general_system_template = f""" 
     You are an assistant named Ernie. You are examining a document. Use only the heading and piece of context to answer the questions at the end. If you don't know the answer, just say that you don't know, don't try to make up an answer. Do not add any observations or comments. Answer only in Chinese.
     ----
@@ -72,8 +73,7 @@ def ask_for_document_summary(vector_store, question,document_description=""):
     CONTEXT: {{context}}
     ----
     """
-    from langchain import PromptTemplate
-    from langchain.chains import RetrievalQA
+
     llm = QianfanLLMEndpoint(
         streaming=True, 
         model="ERNIE-Bot",
@@ -161,9 +161,9 @@ if __name__ == "__main__":
     #     st.write(st.session_state.summary)
     # else:
     #     st.write(st.session_state.summary)
+    
     # Create the placeholder for chat history
     chat_history_placeholder = st.empty()
-
 
 
     if "history" not in st.session_state:
