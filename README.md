@@ -1,6 +1,4 @@
-# EmployeevTraining Bot
-
-# Streamlit App for Document Processing and Analysis
+# EmployeevTraining Bot - Streamlit App for Document Processing and Analysis
 
 This Streamlit application leverages the power of various libraries including LangChain, PyPDF2, and Streamlit itself to perform document analysis, embedding generation, and conversational retrieval from documents. It's designed to handle Chinese text, providing functionalities such as chunking data, creating embeddings, and facilitating interactive Q&A sessions based on the document content.
 
