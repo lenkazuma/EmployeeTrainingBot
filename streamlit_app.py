@@ -65,57 +65,57 @@ def ask_with_memory(vector_store, question, chat_history=[], document_descriptio
     result = crc({'question': question, 'chat_history': chat_history})
     return result
 
-def ask_for_document_summary(vector_store, question,document_description=""):
-    prompt_template = f""" 
-    You are an assistant named Ernie. You are examining a document. Use only the heading and piece of context to do the summary.  Answer only in Chinese.
-    ----
-    HEADING: ({document_description})
-    CONTEXT: {{context}}
-    ----
-    """
-
-    llm = QianfanLLMEndpoint(
-        streaming=True, 
-        model="ERNIE-Bot",
-        endpoint="eb-instant",
-        )
-    prompt = PromptTemplate(template=prompt_template, input_variables=["context", "question"])
-    chain_type_kwargs = {"prompt": prompt, "verbose":True}
-    retriever = vector_store.as_retriever(search_type='similarity', search_kwargs={'k': 5})
-    qa = RetrievalQA.from_chain_type(llm=llm,chain_type="stuff",retriever=retriever,chain_type_kwargs=chain_type_kwargs)
-    document_summary=qa.run(question)
-    st.write(document_summary)
-    return document_summary
-
-
-# def ask_for_summary(vector_store, chat_history=[], document_description=""):
-#     from langchain.chains import ConversationalRetrievalChain
-#     from langchain.prompts.chat import ChatPromptTemplate, HumanMessagePromptTemplate, SystemMessagePromptTemplate
-#     llm = QianfanLLMEndpoint(
-#         streaming=True, 
-#         model="ERNIE-speed",
-#         endpoint="eb-instant",
-#         )
-#     retriever = vector_store.as_retriever( # the vs can return documents
-#     search_type='similarity', search_kwargs={'k': 3})
-    
-#     general_system_template = f""" 
-#     You are an assistant named Ernie. You are examining a document and the previous chat history. Use only the heading and piece of context to answer the questions at the end. If you don't know the answer, just say that you don't know, don't try to make up an answer. Do not add any observations or comments. Answer only in Chinese.
+# def ask_for_document_summary(vector_store, question,document_description=""):
+#     prompt_template = f""" 
+#     You are an assistant named Ernie. You are examining a document. Use only the heading and piece of context to do the summary.  Answer only in Chinese.
 #     ----
 #     HEADING: ({document_description})
 #     CONTEXT: {{context}}
 #     ----
 #     """
-#     general_user_template = "Here is the chat history ```{chat_history}```, do a conversation summary based on the chat history and the document. Remember to only answer if you can from the provided context. Only respond in Chinese. "
-#     messages = [
-#                 SystemMessagePromptTemplate.from_template(general_system_template),
-#                 HumanMessagePromptTemplate.from_template(general_user_template)
-#     ]
-#     qa_prompt = ChatPromptTemplate.from_messages( messages )
 
-#     crc = ConversationalRetrievalChain.from_llm(llm, retriever, combine_docs_chain_kwargs={'prompt': qa_prompt})
-#     summary = crc({'question': "Give me a summary of the conversation", 'chat_history': chat_history})
-#     return summary
+#     llm = QianfanLLMEndpoint(
+#         streaming=True, 
+#         model="ERNIE-Bot",
+#         endpoint="eb-instant",
+#         )
+#     prompt = PromptTemplate(template=prompt_template, input_variables=["context", "question"])
+#     chain_type_kwargs = {"prompt": prompt, "verbose":True}
+#     retriever = vector_store.as_retriever(search_type='similarity', search_kwargs={'k': 5})
+#     qa = RetrievalQA.from_chain_type(llm=llm,chain_type="stuff",retriever=retriever,chain_type_kwargs=chain_type_kwargs)
+#     document_summary=qa.run(question)
+#     st.write(document_summary)
+#     return document_summary
+
+
+def ask_for_summary(vector_store, chat_history=[], document_description=""):
+    from langchain.chains import ConversationalRetrievalChain
+    from langchain.prompts.chat import ChatPromptTemplate, HumanMessagePromptTemplate, SystemMessagePromptTemplate
+    llm = QianfanLLMEndpoint(
+        streaming=True, 
+        model="ERNIE-speed",
+        endpoint="eb-instant",
+        )
+    retriever = vector_store.as_retriever( # the vs can return documents
+    search_type='similarity', search_kwargs={'k': 3})
+    
+    general_system_template = f""" 
+    You are an assistant named Ernie. You are examining a document and the previous chat history. Use only the heading and piece of context to answer the questions at the end. If you don't know the answer, just say that you don't know, don't try to make up an answer. Do not add any observations or comments. Answer only in Chinese.
+    ----
+    HEADING: ({document_description})
+    CONTEXT: {{context}}
+    ----
+    """
+    general_user_template = "Here is the chat history ```{chat_history}```, do a conversation summary based on the chat history and the document. Remember to only answer if you can from the provided context. Only respond in Chinese. "
+    messages = [
+                SystemMessagePromptTemplate.from_template(general_system_template),
+                HumanMessagePromptTemplate.from_template(general_user_template)
+    ]
+    qa_prompt = ChatPromptTemplate.from_messages( messages )
+
+    crc = ConversationalRetrievalChain.from_llm(llm, retriever, combine_docs_chain_kwargs={'prompt': qa_prompt})
+    summary = crc({'question': "Give me a summary of the conversation", 'chat_history': chat_history})
+    return summary
 
 def clear_history():
     if "history" in st.session_state:
