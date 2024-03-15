@@ -10,6 +10,11 @@ from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain.document_loaders import PyPDFLoader
 import sys
 
+import asyncio
+# Ensure an event loop is available and set it as the current event loop
+loop = asyncio.get_event_loop_policy().new_event_loop()
+asyncio.set_event_loop(loop)
+
 __import__('pysqlite3')
 sys.modules['sqlite3'] = sys.modules.pop('pysqlite3')
 
@@ -17,10 +22,10 @@ from langchain.chains import ConversationalRetrievalChain
 from langchain.prompts.chat import ChatPromptTemplate, HumanMessagePromptTemplate, SystemMessagePromptTemplate
 
 llm = QianfanLLMEndpoint(
-    streaming=True, 
-    model="ERNIE-Bot",
-    endpoint="eb-instant"
-    )
+    streaming=True,
+    model="ERNIE-Bot-turbo",
+    endpoint="eb-instant",
+)
 
 
 # chunk the data
@@ -64,35 +69,37 @@ def ask_with_memory(vector_store, question, chat_history=[], document_descriptio
     result = crc({'question': question, 'chat_history': chat_history})
     return result
 
-# def ask_for_document_summary(vector_store, question,document_description=""):
-#     prompt_template = f""" 
-#     You are an assistant named Ernie. You are examining a document. Use only the heading and piece of context to do the summary.  Answer only in Chinese.
-#     ----
-#     HEADING: ({document_description})
-#     CONTEXT: {{context}}
-#     ----
-#     """
+def ask_for_document_summary(vector_store, question,document_description=""):
+    prompt_template = f""" 
+    You are an assistant named Ernie. You are examining a document. Use only the heading and piece of context to do the summary.  Answer only in Chinese.
+    ----
+    HEADING: ({document_description})
+    CONTEXT: {{context}}
+    ----
+    """
 
-#     llm = QianfanLLMEndpoint(
-#         streaming=True, 
-#         model="ERNIE-Bot",
-#         endpoint="eb-instant",
-#         )
-#     prompt = PromptTemplate(template=prompt_template, input_variables=["context", "question"])
-#     chain_type_kwargs = {"prompt": prompt, "verbose":True}
-#     retriever = vector_store.as_retriever(search_type='similarity', search_kwargs={'k': 5})
-#     qa = RetrievalQA.from_chain_type(llm=llm,chain_type="stuff",retriever=retriever,chain_type_kwargs=chain_type_kwargs)
-#     document_summary=qa.run(question)
-#     st.write(document_summary)
-#     return document_summary
+    llm = QianfanLLMEndpoint(
+        streaming=True, 
+        model="ERNIE-Bot",
+        endpoint="eb-instant",
+        )
+    prompt = PromptTemplate(template=prompt_template, input_variables=["context", "question"])
+    chain_type_kwargs = {"prompt": prompt, "verbose":True}
+    retriever = vector_store.as_retriever(search_type='similarity', search_kwargs={'k': 5})
+    qa = RetrievalQA.from_chain_type(llm=llm,chain_type="stuff",retriever=retriever,chain_type_kwargs=chain_type_kwargs)
+    document_summary=qa.run(question)
+    st.write(document_summary)
+    return document_summary
 
 
 def ask_for_summary(vector_store, chat_history=[], document_description=""):
     from langchain.chains import ConversationalRetrievalChain
     from langchain.prompts.chat import ChatPromptTemplate, HumanMessagePromptTemplate, SystemMessagePromptTemplate
     llm = QianfanLLMEndpoint(
-        streaming=True, 
-        model="ERNIE-bot")
+        streaming=True,
+        model="ERNIE-Bot-turbo",
+        endpoint="eb-instant",
+    )
     retriever = vector_store.as_retriever( # the vs can return documents
     search_type='similarity', search_kwargs={'k': 3})
     
@@ -151,13 +158,13 @@ if __name__ == "__main__":
     chunks = chunk_data(st.session_state.data, 384)
     st.session_state.vector_store = create_embeddings(chunks)
 
-    # if "summary" not in st.session_state:
-    #     #st.session_state.summary = []
-    #     pdf_summary = "Give me a concise summary of the document, only respond in Chinese. "
-    #     st.session_state.summary = ask_for_document_summary(st.session_state["vector_store"],pdf_summary,st.session_state.document_description)
-    #     st.write(st.session_state.summary)
-    # else:
-    #     st.write(st.session_state.summary)
+    if "summary" not in st.session_state:
+        #st.session_state.summary = []
+        pdf_summary = "Give me a concise summary of the document, only respond in Chinese. "
+        st.session_state.summary = ask_for_document_summary(st.session_state["vector_store"],pdf_summary,st.session_state.document_description)
+        st.write(st.session_state.summary)
+    else:
+        st.write(st.session_state.summary)
     
     # Create the placeholder for chat history
     chat_history_placeholder = st.empty()
