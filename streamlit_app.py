@@ -66,7 +66,7 @@ def ask_with_memory(vector_store, question, chat_history=[], document_descriptio
     #st.write(qa_prompt)
     #st.write(retriever)
     crc = ConversationalRetrievalChain.from_llm(llm, retriever, combine_docs_chain_kwargs={'prompt': qa_prompt})
-    result = crc({'question': question, 'chat_history': chat_history})
+    result = crc({'question': question, 'chat_history': messages})
     return result
 
 # def ask_for_document_summary(vector_store, question,document_description=""):
