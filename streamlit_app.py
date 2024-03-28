@@ -15,7 +15,6 @@ from langchain.prompts.chat import ChatPromptTemplate, HumanMessagePromptTemplat
 
 llm = QianfanLLMEndpoint(
     streaming=True, 
-    model="ERNIE-Bot-turbo",
     model="ERNIE-speed",
     endpoint="eb-instant",
     )
