@@ -57,8 +57,8 @@ def ask_with_memory(vector_store, question, chat_history=[], document_descriptio
     ]
     qa_prompt = ChatPromptTemplate.from_messages( messages )
 
-    st.write(qa_prompt)
-    st.write(retriever)
+    #st.write(qa_prompt)
+    #st.write(retriever)
     crc = ConversationalRetrievalChain.from_llm(llm, retriever, combine_docs_chain_kwargs={'prompt': qa_prompt})
     result = crc({'question': question, 'chat_history': chat_history})
     return result
@@ -83,7 +83,7 @@ def ask_for_document_summary(vector_store, question,document_description=""):
                                  chain_type_kwargs=chain_type_kwargs
                                  )
     document_summary=qa.run(question)
-    st.write(document_summary)
+    #st.write(document_summary)
     return document_summary
 
 
@@ -111,7 +111,6 @@ def ask_for_summary(vector_store, chat_history=[], document_description=""):
                 HumanMessagePromptTemplate.from_template(general_user_template)
     ]
     qa_prompt = ChatPromptTemplate.from_messages( messages )
-
     crc = ConversationalRetrievalChain.from_llm(llm, retriever, combine_docs_chain_kwargs={'prompt': qa_prompt})
     summary = crc({'question': "Give me a summary of the conversation", 'chat_history': chat_history})
     return summary
