@@ -35,7 +35,8 @@ def chunk_data(data, chunk_size):
 def create_embeddings(chunks):
     print("Embedding to Chroma DB...")
     embeddings = QianfanEmbeddingsEndpoint()
-    vector_store = Chroma.from_documents(documents=chunks, embedding=embeddings)
+    #db2 = Chroma.from_documents(docs, embedding_function, persist_directory="./chroma_db")
+    vector_store = Chroma.from_documents(documents=chunks, embedding=embeddings,persist_directory="./chroma_db")
     print("Done")
     return vector_store
 
@@ -148,8 +149,15 @@ if __name__ == "__main__":
         st.session_state.data = loader.load()
 
     
-    chunks = chunk_data(st.session_state.data, 384)
-    st.session_state.vector_store = create_embeddings(chunks)
+    #st.write(st.session_state.data[0])
+    if "chunks" not in st.session_state:
+        st.session_state.chunks = chunk_data(st.session_state.data, 384)
+    if "vector_store" not in st.session_state:
+        if os.path.exists("./chroma_db"):
+            st.session_state.vector_store = Chroma(persist_directory="./chroma_db", embedding_function=QianfanEmbeddingsEndpoint())
+        else:
+            st.session_state.vector_store = create_embeddings(st.session_state.chunks)
+
 
     if "summary" not in st.session_state:
         #st.session_state.summary = []
