@@ -1,7 +1,7 @@
 import streamlit as st
 from langchain.vectorstores import Chroma
 from langchain.embeddings import QianfanEmbeddingsEndpoint
-from langchain.llms import QianfanLLMEndpoint
+from langchain_community.llms import QianfanLLMEndpoint
 from langchain.chains import LLMMathChain
 import streamlit.components.v1 as components
 import sys
