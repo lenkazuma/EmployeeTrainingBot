@@ -14,11 +14,10 @@ from langchain.chains import ConversationalRetrievalChain
 from langchain.prompts.chat import ChatPromptTemplate, HumanMessagePromptTemplate, SystemMessagePromptTemplate
 
 llm = QianfanLLMEndpoint(
-    streaming=True, 
-    model="ERNIE-speed",
+    streaming=True,
+    model="ERNIE-Bot-turbo",
     endpoint="eb-instant",
-    )
-
+)
 
 # chunk the data
 def chunk_data(data, chunk_size):
