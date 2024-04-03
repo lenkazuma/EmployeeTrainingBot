@@ -4,10 +4,5 @@ docx2txt
 pypdf
 streamlit
 chromadb
-tiktoken
 pysqlite3-binary
-qianfan==0.0.3
-PyJWT>=2.3.0
-bcrypt>= 3.1.7
-PyYAML>= 5.3.1
-extra-streamlit-components>= 0.1.60
+qianfan
